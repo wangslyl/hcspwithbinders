@@ -5,7 +5,7 @@ The source files for implementation of the prover, plus an application on a trai
 
 1. Introduction:
 
-The folder DCSequents include the files for implementing the two assertion languages, first-order logic and duration 
+  The folder DCSequents include the files for implementing the two assertion languages, first-order logic and duration 
 calculus. We list the information in more detail below.
 
   LSyntax.thy: the syntax of expressions and first-order formulas
@@ -18,7 +18,7 @@ calculus. We list the information in more detail below.
 
   DCSequent.thy: the sequent calculus based deductive system for duration calculus
 
-In the root folder, 
+  In the root folder, 
 
   bHCSP_Com.thy: the syntax for the HCSP with binders
 
@@ -30,7 +30,7 @@ In the root folder,
 
 2. How to Use it:
 
-You can always build your model, e.g, with name "usermodel", as follows:
+  You can always build your model, e.g, with name "usermodel", as follows:
 
   theory usermodel
 
