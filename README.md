@@ -38,7 +38,7 @@ calculus. We list the information in more detail below.
   
   begin
   
-      here you can list the definitions of your model, the properties to be proved, and also proofs. 
+        here you can list the definitions of your model, the properties to be proved, and also proofs. 
   
   end
 
