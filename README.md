@@ -34,11 +34,11 @@ You can always build your model, e.g, with name "usermodel", as follows:
 
   theory usermodel
 
-    imports Inference
+   imports Inference
   
   begin
   
-     %here you can list the definitions of your model, the properties to be proved, and also proofs. 
+      here you can list the definitions of your model, the properties to be proved, and also proofs. 
   
   end
 
