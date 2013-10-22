@@ -13,6 +13,8 @@ calculus. We list the information in more detail below.
   DSequents.thy: the sequent calculus style deductive system for any type of formulas
 
   DLK0.thy: the sequent calculus based deductive system for first-order formulas
+  
+  DDLK0.thy: the sequent calclus based deductive system for first-order constructs of interval logic
 
   ILSequent.thy: the sequent calculus based deductive system for interval logic, from which duration calculus is defined
 
