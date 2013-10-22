@@ -26,7 +26,7 @@ calculus. We list the information in more detail below.
 
   Train.thy: the train model written in the syntax defined in bHCSP_Com.thy
 
-  TrainProof.thy: the proofs of the train model, and the last theorem indicates the specification of the train
+  TrainProof.thy: the proofs of the train model, and the last theorem states the specification of the train
 
 2. How to Use it:
 
