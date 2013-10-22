@@ -1,7 +1,7 @@
 hcspwithbinders
 ===============
 
-The source files for implementation of the prover, plus an application on a train example.
+The source files for implementation of the prover, plus one application on verifying a train example.
 
 1. Introduction:
 
