@@ -17,7 +17,8 @@ definition Pre :: "fform" where
 "Pre == VA [&] Vinv [&] Ainv"
 
 section {*Invariants*}
-(*Differential Invariants for the three above continuous in Move1, Move2, and SelfC*)
+(*The differential invariants for the three continuous evolution in Move1, Move2, and SelfC above. They are strong enough 
+to prove the properties as required in the paper. *)
 definition Acc1 :: "fform" where
 "Acc1 == (a [<] Real 0 [&] ((v [>=] (Real (cmax * T2) [+] (a [*] t1) [+] Real (cmax * T1)) [&] (v [<=] Real vmax))))"
 definition Acc2 :: "fform" where
@@ -613,7 +614,7 @@ definition case12B :: "fform" where
 definition case13B :: "fform" where
 "case13B == (BVar wa [=] Bool False) [&] (BVar ua [=] Bool False)"
 
-(*Important: We define the following facts for processes uvwvua and uvwvnon as axioms rather than proving them as we did to process uvwvwa. The reason is that they have very similar structure with uvwvwa, and the proofs are slightly different.*)
+(*Notice that we define the following facts for processes uvwvua and uvwvnon as axioms rather than proving them as we do to process uvwvwa above. The reason is that they have very similar structure with uvwvwa, and the proofs are almost the same as uvwvwa.*)
 axiomatization where
 uvwvuafact : "{(BreakPre [&] [~] case11B) [|] (Pre [&] case1B [&] case11B)}uvwvua
    {(BreakPre [&] [~] case11B [&] [~] case12B) [|] (Pre [&] case1B [&] (case11B [|] case12B));almostz Vinv}" and
@@ -707,7 +708,8 @@ defer apply fast apply (rule impL) defer  apply fast apply (simp add:t2_def)
 apply (rule Transr4, auto)
 done 
 
-lemma FailSelfC1 : "{mid2}IF (t2 [>=] Real T2) SelfC{Pre [&] case1B;almostz Vinv}"
+lemma Fail1 : "{mid2}P2{Pre [&] case1B;almostz Vinv}"
+apply (simp add:P2_def)
 apply (cut_tac qx = "Pre [&] case1B" and hx = "almostz Vinv" in IFelse, auto)
 apply (cut_tac ax = "mid2" and qx ="Pre [&] case1B" and Hx = "almostz Vinv" in Consequence, auto)
 apply (rule SelfCfact1) apply fast+
@@ -715,30 +717,11 @@ apply dfast apply (rule impR) apply (rule disjL) apply (rule Midfact1)
 apply fast apply (simp add:almostz_def) apply dfast
 done 
 
-
-lemma FailSkip1 : "{Pre [&] case1B}SkipV{Pre [&] case1B;almostz Vinv}"
-apply (simp add:SkipV_def)
-apply (cut_tac qx = "Pre [&] case1B" and hx = "almostz Vinv" in IFelse, auto)
-apply (rule Skip) apply fast apply (simp add:almostz_def)
-apply dfast apply fast apply (simp add:almostz_def) apply dfast
-done
-
-lemma Fail1 : "{mid2}P2{Pre [&] case1B;almostz Vinv}"
-apply (simp add:P2_def)
-apply (cut_tac qx = "Pre [&] case1B" and hx = "almostz(Vinv)" and qy = "Pre [&] case1B" and hy = "almostz(Vinv)" in Sequential, auto)
-apply (rule FailSelfC1)
-apply (rule FailSkip1)
-apply fast apply (rule chopalmostz)
-done
-
-
 lemma Control1 : "{afterb1 [&]case1B [&] t2 [=] Real 0}([''s'', ''v'', ''t2'']:<fmove2&&(t2 [<] Real T2)>[[b2 (uvwvwa; uvwvua; uvwvnon)); P2{Pre [&]case1B;almostz Vinv}"
 apply (cut_tac qx = "mid2" and hx = "almostz(Vinv)" and qy = "Pre [&]case1B" and hy = "almostz(Vinv)" in Sequential, auto)
 defer defer apply fast apply (rule chopalmostz)
 apply (rule Break1) apply (rule Fail1)
 done 
-
-
 
 lemma Case1fact : "{afterb1}case1{(Pre [&] case1B) [|] (afterb1 [&] ([~] case1B)); almostz Vinv}"
 apply (simp add:case1_def move2_def Quvwv_def)
@@ -768,8 +751,9 @@ definition case3B :: "fform" where
 definition case4B :: "fform" where
 "case4B == ((BVar uv [=] Bool False) [&] (BVar wv [=] Bool False))"
 
-(*Important: we present the facts for case2, case3, and case4 as axioms rather than proving them
-as what we did to case1. The reason is that they have very similar structure, and the proofs of them are almost the same as case1.*)
+(*Notice that we present the facts for case2, case3, and case4 as axioms rather than proving them
+as what we do to case1 above. The reason is that they have very similar structure, 
+and the proofs of them are almost the same as case1.*)
 axiomatization where
 Case2fact : "{(Pre [&] case1B) [|] (afterb1 [&] ([~] case1B))}case2
 {(Pre [&] (case2B [|] case1B)) [|] (afterb1 [&] ([~] case2B) [&] ([~] case1B)); almostz Vinv}"
@@ -857,7 +841,8 @@ apply fast
 apply (rule chopalmostz)
 done 
 
-lemma FailSelfC : "{mid1}IF (t1 [>=] Real T1) SelfC {Pre; almostz Vinv}"
+lemma Fail : "{mid1} P1 {Pre; almostz Vinv}"
+apply (simp add:P1_def)
 apply (cut_tac qx = "Pre" and hx = "almostz Vinv" in IFelse, auto)
 apply (cut_tac ax = "mid1" and qx ="Pre" and Hx = "almostz Vinv" in Consequence, auto)
 apply (rule SelfCfact)
@@ -873,27 +858,6 @@ apply (simp add:almostz_def)
 apply dfast+
 done 
 
-lemma FailSkip : " {Pre} SkipV {Pre; almostz Vinv}"
-apply (simp add:SkipV_def)
-apply (cut_tac qx = "Pre" and hx = "almostz Vinv" in IFelse, auto)
-apply (rule Skip)
-apply fast
-apply (simp add:almostz_def)
-apply dfast
-apply fast
-apply (simp add:almostz_def)
-apply dfast
-done
-
-lemma Fail : "{mid1} P1 {Pre; almostz Vinv}"
-apply (simp add:P1_def)
-apply (cut_tac qx = "Pre" and hx = "almostz(Vinv)" and qy = "Pre" and hy = "almostz(Vinv)" in Sequential, auto)
-apply (rule FailSelfC)
-apply (rule FailSkip)
-apply fast
-apply (rule chopalmostz)
-done
-
 lemma Control : "{Pre [&] t1 [=] Real 0} body; P1 {Pre; almostz Vinv}"
 apply (cut_tac qx = "mid1" and hx = "almostz(Vinv)" and qy = "Pre" and hy = "almostz(Vinv)" in Sequential, auto)
 apply (rule Bodyfact)
@@ -903,7 +867,8 @@ apply (rule chopalmostz)
 done 
 
 
-(*This is the final theorem stating the safety of the train, as defined in the paper.*)
+(*This is the main theorem stating the safety of the train.*)
+(*It shows that the velocity v is always in the range [0, vmax], which implies property F2, as defined in the paper.*)
 theorem Train : "{Pre} train {Pre; almostz(Vinv)}"
 apply (simp add:train_def)
 apply (cut_tac qx = "Pre [&] t1 [=] (Real 0)" and hx = "almostz(Vinv)" 
