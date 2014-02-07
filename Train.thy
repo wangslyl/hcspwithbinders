@@ -107,17 +107,14 @@ definition SelfC :: "bproc" where
          [''s'', ''v'']:<fselfc&& (v [>] (Real 0))>;
           a := (Real 0)"
 
-(*When v is outside the range, then skip.*)
-definition SkipV :: "bproc" where
-"SkipV == IF ((v [<] Real 0) [|] (v [>] Real vmax)) Skip"
 
-(*When the train fails to send the velocity within T1 time, then self control; and then check if v is outside the range*)
+(*When the train fails to send the velocity within T1 time units, then self control.*)
 definition P1 :: "bproc" where
-"P1 == IF (t1 [>=] Real T1) SelfC; SkipV"
+"P1 == IF (t1 [>=] Real T1) SelfC"
 
-(*When the train fails to receive the acceleration within T2, then self control; and then check if v is safe.*)
+(*When the train fails to receive the acceleration within T2 time units, then self control.*)
 definition P2 :: "bproc" where
-"P2 == IF (t2 [>=] Real T2) SelfC; SkipV"
+"P2 == IF (t2 [>=] Real T2) SelfC"
 
 (*Under Case 1, Case for receiving a from vc successfully*)
 definition uvwvwa :: "bproc" where
