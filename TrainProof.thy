@@ -618,6 +618,7 @@ definition case13B :: "fform" where
 axiomatization where
 uvwvuafact : "{(BreakPre [&] [~] case11B) [|] (Pre [&] case1B [&] case11B)}uvwvua
    {(BreakPre [&] [~] case11B [&] [~] case12B) [|] (Pre [&] case1B [&] (case11B [|] case12B));almostz Vinv}" and
+(*The following fact implies that location 2 is not reachable: the precondition of "uvwvnonfact" in conjunction with the condition in "uvwvnon" are not satisfiable.*)
 uvwvnonfact: "{(BreakPre [&] [~] case11B [&] [~] case12B) [|] (Pre [&] case1B [&] (case11B [|] case12B))}uvwvnon
   {(BreakPre [&] [~] case11B [&] [~] case12B [&] [~] case13B) [|] (Pre [&] case1B [&] (case11B [|] case12B [|] case13B));almostz Vinv}"
 
@@ -761,6 +762,7 @@ and
 Case3fact : "{(Pre [&] (case2B [|] case1B)) [|] (afterb1 [&] ([~] case2B) [&] ([~] case1B))}case3
              {(Pre [&] (case3B [|] case2B [|] case1B)) [|] (afterb1 [&] ([~] case3B)[&] ([~] case2B) [&] ([~] case1B)); almostz Vinv}"
 and
+(*The following fact implies that location 1 is not reachable: the precondition of "Case4fact" in conjunction with the condition of "case4" are not satisfiable. *)
 Case4fact : "{(Pre [&] (case3B [|] case2B [|] case1B)) [|] (afterb1 [&] ([~] case3B)[&] ([~] case2B) [&] ([~] case1B))}case4
                    {(Pre [&] (case4B [|] case3B [|] case2B [|] case1B)) [|] (afterb1 [&] ([~]case4B) [&] ([~] case3B)[&] ([~] case2B) [&] ([~] case1B)); almostz Vinv}"
 
@@ -866,10 +868,7 @@ apply fast
 apply (rule chopalmostz)
 done 
 
-
-(*This is the main theorem stating the safety of the train.*)
-(*It shows that the velocity v is always in the range [0, vmax], which implies property F2, as defined in the paper.*)
-theorem Train : "{Pre} train {Pre; almostz(Vinv)}"
+theorem TrainOneLoop : "{Pre} train {Pre; almostz(Vinv)}"
 apply (simp add:train_def)
 apply (cut_tac qx = "Pre [&] t1 [=] (Real 0)" and hx = "almostz(Vinv)" 
            and qy = "Pre" and hy = "almostz(Vinv)" in Sequential, auto)
@@ -881,6 +880,17 @@ apply (rule Control)
 apply fast
 apply (rule chopalmostz)
 done 
+
+(*This is the main theorem stating the safety of the train.*)
+(*It shows that the velocity v is always in the range [0, vmax], which implies property F2, as defined in the paper.*)
+theorem TrainSpec : "{Pre} train* {Pre; almostz(Vinv)}"
+apply (cut_tac p = "Pre" and hx = "almostz(Vinv)" and q = "Pre" and h = "almostz(Vinv)" in Repetition, auto)
+apply (rule TrainOneLoop)
+apply (rule chopalmostz)
+apply fast
+apply (simp add:almostz_def)
+apply dfast
+done
 
 
 end
